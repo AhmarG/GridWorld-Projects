@@ -1,6 +1,6 @@
 import info.gridworld.actor.*;
 import info.gridworld.grid.Location;
-
+import info.gridworld.grid.BoundedGrid;
 
 public class VectorWorld extends ActorWorld
 {
@@ -11,6 +11,7 @@ public class VectorWorld extends ActorWorld
 	{
 		this.b1 = b1;
 		this.b2 = b2;
+		setGrid(new BoundedGrid<Actor>(11,13));
 	}
 	
 	public boolean keyPressed(String description, Location loc)
