@@ -22,9 +22,12 @@ public class BallRunner
         ball.setStartLoc(ball.getLocation());
         ball.setWorld(world);
         ball2.setGoalLocation(goal.getLocation());
-        ball2.setStartLoc(ball.getLocation());
+        ball2.setStartLoc(ball2.getLocation());
         ball2.setWorld(world);
-        world.setMessage("Move a ball to the goal location");
+        world.setMessage("Appalachain State University Computer Science ©\t\t"
+        		+ "Author: Ahmar Gordon\n"
+        		+ "Physics Vector Demo\t\t"
+        		+ "Objective: Move a ball to the goal location");
         world.show();
         
     }

@@ -14,6 +14,9 @@ public class VectorWorld extends ActorWorld
 		setGrid(new BoundedGrid<Actor>(11,13));
 	}
 	
+	/**
+	 * Allows response from keyboard to move BallMove object
+	 */
 	public boolean keyPressed(String description, Location loc)
 	{
 		if(description.equals("D"))
@@ -40,7 +43,7 @@ public class VectorWorld extends ActorWorld
 			return true;
 		}
 		
-		if(description.equals("G"))
+		if(description.equals("F"))
 		{
 			b1.act();
 			return true;

@@ -8,14 +8,18 @@
  * @version 1.3
  */
 import info.gridworld.actor.Bug;
-import info.gridworld.actor.Flower;
 import info.gridworld.grid.Location;
+import info.gridworld.actor.Flower;
 
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 import java.awt.Color;
 
+/**
+ * Specific implementation of Bug to demo
+ * 2D vector calculation
+ */
 public class BallMove extends Bug
 {
 	private int steps;
@@ -35,20 +39,34 @@ public class BallMove extends Bug
 		sideLength = length;
 		this.color = color;
 	}
-
+	
+	/**
+	 * Sets goal location for this Ball
+	 * @param goal
+	 */
 	public void setGoalLocation(Location goal)
 	{
 		this.goal = goal;
 	}
 	
+	/**
+	 * Makes sure the Ball can remember where it started
+	 * in the grid
+	 * @param str
+	 */
 	public void setStartLoc(Location str)
 	{
 		this.startLoc = str;
 	}
+	/**
+	 * Sets world associated with this Ball
+	 * @param w VectorWorld
+	 */
 	public void setWorld(VectorWorld w)
 	{
 		this.w = w;
 	}
+	
 	/**
 	 * Main movement methods. Contains error checking
 	 */
@@ -66,20 +84,19 @@ public class BallMove extends Bug
 
 		if(atGoal())
 		{
-			JOptionPane.showMessageDialog(null, calcVector(), "Goal location reached!", JOptionPane.INFORMATION_MESSAGE);
-			//System.out.println(color + " ball - goal location reached");
-			//calcVector();
+			JOptionPane.showMessageDialog(null, calcVector(),
+					"Goal location reached!", JOptionPane.INFORMATION_MESSAGE);
 			reset();
 		}
 
 	}
 	
 	/**
-	 * Helper for act()
+	 * Helper for act(). Moving left or right
 	 */
 	private void moverX()
 	{
-		if (steps < sideLength && canMove())
+		if (canMove())
 		{
 			Location temp = getLocation();
 			move();
@@ -93,6 +110,7 @@ public class BallMove extends Bug
 			{
 				xsteps--;
 				steps--;
+				getGrid().remove(temp);
 				path.remove(temp);
 			}
 			
@@ -104,14 +122,22 @@ public class BallMove extends Bug
 			//xsteps = 0;
 			//steps = 0;
 		}
+		
+		if(steps >= sideLength)
+		{
+			String x = "You've taken many steps!\nTry a more direct path to the goal";
+			JOptionPane.showMessageDialog(null, x,
+					"Lets try that again", JOptionPane.WARNING_MESSAGE);
+			reset();
+		}
 	}
 	
 	/**
-	 * Helper for act()
+	 * Helper for act(). Moving up or down
 	 */
 	private void moverY()
 	{
-		if (steps < sideLength && canMove())
+		if (canMove())
 		{
 			Location temp = getLocation();
 			move();
@@ -125,6 +151,7 @@ public class BallMove extends Bug
 			{
 				ysteps--;
 				steps--;
+				getGrid().remove(temp);
 				path.remove(temp);
 			}
 
@@ -136,14 +163,22 @@ public class BallMove extends Bug
 			//ysteps = 0;
 			//steps = 0;
 		}
+		
+		if(steps >= sideLength)
+		{
+			String x = "You've taken many steps!\nTry a more direct path to the goal";
+			JOptionPane.showMessageDialog(null, x,
+					"Lets try that again", JOptionPane.WARNING_MESSAGE);
+			reset();
+		}
 	}
 	
 	/**
-	 * Helper for act()
+	 * Helper for act(). Moving diagonally
 	 */
 	private void mover()
 	{
-		if (steps < sideLength && canMove())
+		if (canMove())
 		{
 			Location temp = getLocation();
 			move();
@@ -159,6 +194,7 @@ public class BallMove extends Bug
 				xsteps--;
 				ysteps--;
 				steps--;
+				getGrid().remove(temp);
 				path.remove(temp);
 			}
 
@@ -168,6 +204,13 @@ public class BallMove extends Bug
 			turn();
 			turn();
 			//steps = 0;
+		}
+		if(steps >= sideLength)
+		{
+			String x = "You've taken many steps!\nTry a more direct path to the goal";
+			JOptionPane.showMessageDialog(null, x,
+					"Lets try that again", JOptionPane.WARNING_MESSAGE);
+			reset();
 		}
 	}
 	
@@ -234,12 +277,21 @@ public class BallMove extends Bug
 		String x = "Equation used: √("+xsteps+"^2)+("+ysteps+"^2)\n\n";
 		return x+"Vector = " + vector;
 	}
+	
+	/**
+	 * Sends the Ball back to where it started upon 
+	 * reaching its goal
+	 */
 	private void reset()
 	{
 		moveTo(startLoc);
-		for(int x = 1; x < path.size(); x++)
+		for(int x = 0; x < path.size(); x++)
 		{
-			getGrid().remove(path.get(x));
+			if(getGrid().get(path.get(x)) instanceof Flower)
+			{
+				getGrid().remove(path.get(x));
+			}
+			
 		}
 		path.clear();
 		steps=0;
@@ -247,11 +299,7 @@ public class BallMove extends Bug
 		ysteps=0;
 		Goal f = new Goal(Color.GRAY);
 		w.add(goal, f);
-		//getGrid().put(new Location(0,0),f);
-		//f.moveTo(goal);
-		
-		if(f.getGrid() == null)
-			System.out.println("null grid for flower");
+
 	}
 	
 	
